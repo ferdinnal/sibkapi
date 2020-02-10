@@ -171,4 +171,90 @@ class Pengguna extends REST_Controller
         }
         print json_encode($arr_result);
     }
+
+    function update_email_post() {
+
+      $data = array('alamat_email' => $this->input->post('alamat_email'), );
+      $where = array('id_pengguna' => $this->input->post('id_pengguna'), );
+
+        $arr_result = array();
+
+          if ($this->Mpengguna->update($data,$where))
+           {
+
+             $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'success',
+                     'message' => 'Data diupdate.',
+                 )
+             );
+          }else {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'warning',
+                    'message' => 'Data Tidak diupdate.'
+                )
+            );
+          }
+
+        print json_encode($arr_result);
+    }
+
+    function update_handphone_post() {
+
+      $data = array('no_handphone' => $this->input->post('no_handphone'), );
+      $where = array('id_pengguna' => $this->input->post('id_pengguna'), );
+
+        $arr_result = array();
+
+          if ($this->Mpengguna->update($data,$where))
+           {
+
+             $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'success',
+                     'message' => 'Data diupdate.',
+                 )
+             );
+          }else {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'warning',
+                    'message' => 'Data Tidak diupdate.'
+                )
+            );
+          }
+
+        print json_encode($arr_result);
+    }
+    function update_password_post() {
+
+      $data = array(
+        'password' => md5($this->input->post('password'))
+      , );
+      $where = array('id_pengguna' => $this->input->post('id_pengguna'), );
+
+        $arr_result = array();
+
+          if ($this->Mpengguna->update($data,$where))
+           {
+
+             $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'success',
+                     'message' => 'Data diupdate.',
+                 )
+             );
+          }else {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'warning',
+                    'message' => 'Data Tidak diupdate.'
+                )
+            );
+          }
+
+        print json_encode($arr_result);
+    }
+
 }

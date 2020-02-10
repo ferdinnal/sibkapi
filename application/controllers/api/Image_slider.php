@@ -11,7 +11,7 @@ if (!defined('BASEPATH')) {
 
 class Image_slider extends REST_Controller
 {
-    private $field_list = array('id_slider_imgae', 'image_url', 'title', 'content'
+    private $field_list = array('id_slider_image', 'image_url', 'title', 'content'
             , 'date_created', 'is_active', 'id_pengguna_type');
     public function __construct()
     {

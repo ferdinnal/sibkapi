@@ -2,8 +2,8 @@
 
 class Mslider_image extends CI_Model
 {
-    private $table = "slider_imgae";
-    private $field_list = array('id_slider_imgae', 'image_url', 'title', 'content'
+    private $table = "slider_image";
+    private $field_list = array('id_slider_image', 'image_url', 'title', 'content'
             , 'date_created', 'is_active', 'id_pengguna_type');
     private $exception_field = array('');
 
