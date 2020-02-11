@@ -1,35 +1,121 @@
 <?php
-class mkelas extends CI_Model
+class Mkelas extends CI_Model
 {
-	function findById($id_pengguna,$id_kelas)
+	private $table = "kelas";
+	private $table_siswa = "detail_siswa";
+	private $table_guru= "detail_guru";
+	private $table_pengguna = "pengguna";
+	private $table_jurusan = "jurusan";
+	private $field_list = array('id_kelas', 'nama_kelas', 'latitude', 'longitude'
+					, 'id_wali_kelas', 'id_jurusan');
+	private $exception_field = array('');
+
+	public function __construct()
 	{
-		$sql="SELECT k.*,m.* FROM kelas k,mata_pelajaran m WHERE m.id_kelas=k.id_kelas AND m.id_guru='".$id_pengguna."' AND k.id_kelas='".$id_kelas."'";
-		$result=$this->db->query($sql)->row();
-		return $result;
+			parent::__construct();
+			$this->load->model('Mpengaturan');
 	}
-	function findByIdSiswa($id_pengguna,$id_kelas)
+
+	public function find_siswa_all($id_kelas, $result_type, $option = null)
 	{
-		$sql="SELECT k.*,m.* FROM kelas k,mata_pelajaran m WHERE m.id_kelas=k.id_kelas AND k.id_kelas='".$id_kelas."'";
-		$result=$this->db->query($sql)->row();
-		return $result;
+			$select = "";
+
+			$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+			$this->db->select($this->table.".id_kelas");
+			$this->db->select($this->table_siswa.".id_pengguna");
+			$this->db->select($this->table_siswa.".nisn");
+			$this->db->select($this->table_pengguna.".nama_pengguna");
+			$this->db->select($this->table_pengguna.".gambar_profil");
+			$this->db->select($this->table_pengguna.".jenis_kelamin");
+			$this->db->select($this->table_pengguna.".tanggal_lahir");
+			$this->db->select($this->table_pengguna.".alamat_email");
+			$this->db->select($this->table_pengguna.".no_handphone");
+			$this->db->join($this->table_siswa, $this->table . '.id_kelas = ' . $this->table_siswa . '.id_kelas');
+			$this->db->join($this->table_pengguna, $this->table_siswa . '.id_pengguna = ' . $this->table_pengguna . '.id_pengguna');
+			$this->db->where($this->table . '.id_kelas', $id_kelas);
+			$this->db->order_by($this->table_pengguna.".nama_pengguna",'asc');
+
+			if ($result_type == "row") {
+					return $this->db->get($this->table)->row();
+			} else {
+					return $this->db->get($this->table)->result();
+			}
 	}
-  function findWaliKelas($id_wali_kelas)
-  {
-    $sql="SELECT p.*,g.* FROM kelas k,pengguna p,guru_detail g WHERE k.id_wali_kelas='".$id_wali_kelas."' AND k.id_wali_kelas=p.id_pengguna AND p.id_pengguna=g.id_pengguna";
-    $result=$this->db->query($sql)->row();
-    return $result;
-  }
-  function findCountSiswa($id_kelas)
-  {
-    $sql="SELECT COUNT(id_siswa) as jumlah_siswa FROM siswa_detail WHERE id_kelas='".$id_kelas."'";
-    $result=$this->db->query($sql)->result();
-    return $result;
-  }
-  function findSiswa($id_kelas)
-  {
-    $sql="SELECT p.*,s.* FROM siswa_detail s,pengguna p WHERE p.id_pengguna=s.id_pengguna AND s.id_kelas='".$id_kelas."' ORDER BY p.nama_pengguna ASC";
-    $result=$this->db->query($sql)->result();
-    return $result;
-  }
+
+	public function findWaliKelas($id_wali_kelas, $result_type, $option = null)
+	{
+			$select = "";
+
+			$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+			$this->db->select($this->table.".id_kelas");
+			$this->db->select($this->table_guru.".id_pengguna");
+			$this->db->select($this->table_guru.".nip");
+			$this->db->select($this->table_pengguna.".nama_pengguna");
+			$this->db->select($this->table_pengguna.".gambar_profil");
+			$this->db->select($this->table_pengguna.".jenis_kelamin");
+			$this->db->select($this->table_pengguna.".tanggal_lahir");
+			$this->db->join($this->table_guru, $this->table . '.id_wali_kelas = ' . $this->table_guru . '.id_pengguna');
+			$this->db->join($this->table_pengguna, $this->table_guru . '.id_pengguna = ' . $this->table_pengguna . '.id_pengguna');
+			$this->db->where($this->table . '.id_wali_kelas', $id_wali_kelas);
+
+			if ($result_type == "row") {
+					return $this->db->get($this->table)->row();
+			} else {
+					return $this->db->get($this->table)->result();
+			}
+	}
+
+	public function findJurusan($id_jurusan, $result_type, $option = null)
+	{
+			$select = "";
+
+			$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+			$this->db->select($this->table_jurusan.".nama_jurusan");
+			$this->db->join($this->table_jurusan, $this->table . '.id_jurusan = ' . $this->table_jurusan . '.id_jurusan');
+			$this->db->where($this->table . '.id_jurusan', $id_jurusan);
+
+			if ($result_type == "row") {
+					return $this->db->get($this->table)->row();
+			} else {
+					return $this->db->get($this->table)->result();
+			}
+	}
+	public function findKelas($id_kelas, $result_type, $option = null)
+	{
+			$select = "";
+
+			$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+			$this->db->select('*');
+			$this->db->where($this->table . '.id_kelas', $id_kelas);
+
+			if ($result_type == "row") {
+					return $this->db->get($this->table)->row();
+			} else {
+					return $this->db->get($this->table)->result();
+			}
+	}
+	function findById($id_pengguna, $result_type, $option = null)
+	{
+		$select = "";
+
+		$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+		$this->db->select($this->table_siswa.".id_kelas");
+		$this->db->select($this->table.".id_wali_kelas");
+		$this->db->select($this->table.".id_jurusan");
+		$this->db->join($this->table, $this->table_siswa . '.id_kelas = ' . $this->table . '.id_kelas');
+		$this->db->where($this->table_siswa . '.id_pengguna', $id_pengguna);
+
+		if ($result_type == "row") {
+				return $this->db->get($this->table_siswa)->row();
+		} else {
+				return $this->db->get($this->table_siswa)->result();
+		}
+	}
+
 }
 ?>
