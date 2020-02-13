@@ -6,6 +6,10 @@ class Mkelas extends CI_Model
 	private $table_guru= "detail_guru";
 	private $table_pengguna = "pengguna";
 	private $table_jurusan = "jurusan";
+	private $table_jadwal_pelajaran= "jadwal_pelajaran";
+	private $table_mata_pelajaran_guru= "mata_pelajaran_guru";
+	private $table_mata_pelajaran= "mata_pelajaran";
+
 	private $field_list = array('id_kelas', 'nama_kelas', 'latitude', 'longitude'
 					, 'id_wali_kelas', 'id_jurusan');
 	private $exception_field = array('');
@@ -116,6 +120,53 @@ class Mkelas extends CI_Model
 				return $this->db->get($this->table_siswa)->result();
 		}
 	}
+	function findGuruByKelas($id_pengguna, $result_type, $option = null)
+	{
+		$select = "";
 
+		$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+		$this->db->select($this->table_siswa.".id_kelas");
+		$this->db->select($this->table_mata_pelajaran_guru.".id_guru");
+		$this->db->select($this->table_pengguna.".nama_pengguna");
+		$this->db->select($this->table_pengguna.".alamat_email");
+		$this->db->select($this->table_pengguna.".no_handphone");
+		$this->db->select($this->table_pengguna.".gambar_profil");
+		$this->db->select($this->table_pengguna.".jenis_kelamin");
+		$this->db->select($this->table_guru.".nip");
+		$this->db->join($this->table_jadwal_pelajaran, $this->table_siswa . '.id_kelas = ' . $this->table_jadwal_pelajaran . '.id_kelas');
+		$this->db->join($this->table_mata_pelajaran_guru, $this->table_jadwal_pelajaran . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
+		$this->db->join($this->table_pengguna, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_pengguna . '.id_pengguna');
+		$this->db->join($this->table_guru, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_guru . '.id_pengguna');
+		$this->db->where($this->table_siswa . '.id_pengguna', $id_pengguna);
+		$this->db->where($this->table_jadwal_pelajaran . '.id_semester', $is_semester);
+		$this->db->order_by($this->table_pengguna.".nama_pengguna",'asc');
+		$this->db->group_by($this->table_mata_pelajaran_guru.".id_guru");
+
+		if ($result_type == "row") {
+				return $this->db->get($this->table_siswa)->row();
+		} else {
+				return $this->db->get($this->table_siswa)->result();
+		}
+	}
+
+	function find_guru_detail($id_guru, $result_type, $option = null)
+	{
+		$select = "";
+
+		$is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+		$this->db->select($this->table_mata_pelajaran_guru.".id_guru");
+		$this->db->select($this->table_mata_pelajaran.".nama_mata_pelajaran");
+		$this->db->select($this->table_mata_pelajaran.".kode_mata_pelajaran");
+		$this->db->join($this->table_mata_pelajaran, $this->table_mata_pelajaran_guru . '.id_mata_pelajaran = ' . $this->table_mata_pelajaran . '.id_mata_pelajaran');
+		$this->db->where($this->table_mata_pelajaran_guru . '.id_guru', $id_guru);
+
+		if ($result_type == "row") {
+				return $this->db->get($this->table_mata_pelajaran_guru)->row();
+		} else {
+				return $this->db->get($this->table_mata_pelajaran_guru)->result();
+		}
+	}
 }
 ?>

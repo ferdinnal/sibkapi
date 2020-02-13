@@ -116,7 +116,6 @@ class Mjadwal_pelajaran extends CI_Model
         $this->db->join($this->table_kelas, $this->table . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
         $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
         $this->db->join($this->table_mata_pelajaran, $this->table_mata_pelajaran . '.id_mata_pelajaran = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran');
-        $this->db->join($this->table_detail_siswa, $this->table_kelas . '.id_kelas = ' . $this->table_detail_siswa . '.id_kelas');
         $this->db->join($this->table_detail_guru, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_detail_guru . '.id_pengguna');
         $this->db->join($this->table_pengguna, $this->table_detail_guru . '.id_pengguna = ' . $this->table_pengguna . '.id_pengguna');
         $this->db->join($this->table_ruangan, $this->table . '.id_ruangan = ' . $this->table_ruangan . '.id_ruangan');

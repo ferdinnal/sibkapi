@@ -71,6 +71,52 @@ class Kelas extends REST_Controller {
 
         print json_encode($arr_result);
     }
+    function findGuruByKelas_post() {
+        $id_pengguna= $this->input->post('id_pengguna');
+
+        $arr_result = array();
+        $data_kelas=$this->Mkelas->findGuruByKelas($id_pengguna,'result');
+
+        if ($id_pengguna == "") {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'error',
+                    'message' => 'Coba Ulangi Lagi'
+                )
+            );
+        } else {
+          if (count($data_kelas)==0)
+           {
+             $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'warning',
+                     'message' => 'Jadwal Tidak Ditemukan'
+                 )
+             );
+          }else {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'success',
+                    'message' => 'Data Pengguna Ditemukan.',
+                    'data_kelas'     => $data_kelas,
+                  )
+            );
+          }
+          }
+
+        print json_encode($arr_result);
+    }
+
+    function findgurudetail_get($id_guru) {
+        $data = $this->Mkelas->find_guru_detail($id_guru,'result');
+        $row = array();
+
+        foreach ($data as $produk) {
+            $row[] = $produk;
+        }
+
+        print json_encode($row);
+    }
     function find_by_id_siswa() {
         $id_kelas= $this->input->post('id_kelas');
         $id_pengguna= $this->input->post('id_pengguna');
@@ -113,6 +159,8 @@ class Kelas extends REST_Controller {
 
         print json_encode($arr_result);
     }
+
+
 }
 
 ?>
