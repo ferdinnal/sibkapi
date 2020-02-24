@@ -153,7 +153,7 @@ class Jadwal_pelajaran extends REST_Controller
     }
 
     function jadwal_pelajaran_detail_list_get($hari) {
-        $data = $this->Mjadwal_pelajaran->find_siswa_detail($hari,'result');
+        $data = $this->Mjadwal_pelajaran->find_siswa_detail_2($hari,'result');
         $row = array();
 
         foreach ($data as $produk) {

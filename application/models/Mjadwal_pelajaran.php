@@ -129,6 +129,70 @@ class Mjadwal_pelajaran extends CI_Model
             return $this->db->get($this->table)->result();
         }
     }
+    public function find_siswa_detail_2($hari, $result_type, $option = null)
+    {
+        $select = "";
+
+        $hari_1=date('N', strtotime(' +0 day'));
+        $hari_2=date('N', strtotime(' +1 day'));
+        $hari_3=date('N', strtotime(' +2 day'));
+        $hari_4=date('N', strtotime(' +3 day'));
+        $hari_5=date('N', strtotime(' +4 day'));
+        $hari_6=date('N', strtotime(' +5 day'));
+        $hari_7=date('N', strtotime(' +6 day'));
+        $date_1=date('Y-m-d', strtotime(' +0 day'));
+        $date_2=date('Y-m-d', strtotime(' +1 day'));
+        $date_3=date('Y-m-d', strtotime(' +2 day'));
+        $date_4=date('Y-m-d', strtotime(' +3 day'));
+        $date_5=date('Y-m-d', strtotime(' +4 day'));
+        $date_6=date('Y-m-d', strtotime(' +5 day'));
+        $date_7=date('Y-m-d', strtotime(' +6 day'));
+
+        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+        $this->db->select($this->table_kelas.".id_kelas");
+        $this->db->select($this->table_mata_pelajaran_guru.".id_mata_pelajaran_guru");
+        $this->db->select($this->table_mata_pelajaran.".id_mata_pelajaran");
+        $this->db->select($this->table.".id_jadwal_pelajaran");
+        $this->db->select($this->table_kelas.".nama_kelas");
+        $this->db->select($this->table_mata_pelajaran.".nama_mata_pelajaran");
+        $this->db->select($this->table_detail_guru.".nip");
+        $this->db->select($this->table_pengguna.".nama_pengguna as nama_guru");
+        $this->db->select($this->table_ruangan.".nama_ruangan");
+        $this->db->select($this->table.".jam_mulai as mulai");
+        $this->db->select($this->table.".jam_beres as beres");
+        $this->db->select($this->table.".hari as hari");
+        $this->db->select("'$date_1' as tanggal_1");
+        $this->db->select("'$date_2' as tanggal_2");
+        $this->db->select("'$date_3' as tanggal_3");
+        $this->db->select("'$date_4' as tanggal_4");
+        $this->db->select("'$date_5' as tanggal_5");
+        $this->db->select("'$date_6' as tanggal_6");
+        $this->db->select("'$date_7' as tanggal_7");
+        $this->db->select("'$hari_1' as hari_1");
+        $this->db->select("'$hari_2' as hari_2");
+        $this->db->select("'$hari_3' as hari_3");
+        $this->db->select("'$hari_4' as hari_4");
+        $this->db->select("'$hari_5' as hari_5");
+        $this->db->select("'$hari_6' as hari_6");
+        $this->db->select("'$hari_7' as hari_7");
+        $this->db->select($this->table.".id_semester");
+        $this->db->join($this->table_kelas, $this->table . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
+        $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
+        $this->db->join($this->table_mata_pelajaran, $this->table_mata_pelajaran . '.id_mata_pelajaran = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran');
+        $this->db->join($this->table_detail_guru, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_detail_guru . '.id_pengguna');
+        $this->db->join($this->table_pengguna, $this->table_detail_guru . '.id_pengguna = ' . $this->table_pengguna . '.id_pengguna');
+        $this->db->join($this->table_ruangan, $this->table . '.id_ruangan = ' . $this->table_ruangan . '.id_ruangan');
+        $this->db->where($this->table . '.hari', $hari);
+        $this->db->where($this->table . '.id_semester', $is_semester);
+        $this->db->order_by($this->table.".jam_mulai", 'ASC');
+
+        if ($result_type == "row") {
+            return $this->db->get($this->table)->row();
+        } else {
+            return $this->db->get($this->table)->result();
+        }
+    }
     public function findByIdNewSiswa($id_pengguna)
     {
         $hari_ini=date('N');
