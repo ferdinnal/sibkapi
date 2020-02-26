@@ -9,25 +9,26 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
-class Pengaturan extends REST_Controller
+class Pelajaran extends REST_Controller
 {
-    private $field_list = array('id_pengaturan', 'nama_pengaturan', 'nilai_pengaturan', 'deskripsi');
+    private $field_list = array('id_mata_pelajaran', 'kode_mata_pelajaran', 'nama_mata_pelajaran', 'gambar_mata_pelajaran');
 
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Mpengaturan');
+        $this->load->model('Mpelajaran');
     }
 
-    public function find_get($nama_pengaturan)
+    public function findBySiswa_post()
     {
-        $data_slider=$this->Mpengaturan->findByName($nama_pengaturan);
+        $id_pengguna=$this->input->post('id_pengguna');
+        $data_slider=$this->Mpelajaran->find_siswa_all($id_pengguna, 'result');
         if (count($data_slider)>0) {
             $arr_result = array(
                             'prilude' => array(
                                     'status' => 'success',
                                     'message' => 'Data berhasil ditemukan.',
-                                    'data_pengaturan'    =>  $data_slider,
+                                    'data_pelajaran'    =>  $data_slider,
                             )
                     );
         } else {
