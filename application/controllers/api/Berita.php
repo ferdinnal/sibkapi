@@ -17,6 +17,7 @@ class Berita extends REST_Controller
     {
         parent::__construct();
         $this->load->model('Mberita');
+        date_default_timezone_set("Asia/Bangkok");
     }
 
     public function find_post()

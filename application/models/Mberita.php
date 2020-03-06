@@ -20,7 +20,7 @@ class Mberita extends CI_Model
     /*
     Untuk melakukan pencarian data product
      */
-    public function finds($id_pengguna_type,$keyword, $option)
+    public function finds($id_pengguna_type,$keyword=null, $option=null)
     {
         $this->db->select($this->table . '.*');
 

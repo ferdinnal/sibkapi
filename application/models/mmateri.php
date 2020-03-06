@@ -20,11 +20,12 @@ class Mmateri extends CI_Model
         $this->load->model('Mpengaturan');
     }
 
-    public function findBySiswaModel($id_mata_pelajaran_guru, $result_type, $option = null)
+    public function findBySiswaModel($id_mata_pelajaran_guru, $result_type, $jenis=null, $keyword = null, $option = null)
     {
         $select = "";
 
         $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
 
         $this->db->select($this->table.".nama_materi");
         $this->db->select($this->table.".deskripsi_materi");
@@ -37,7 +38,39 @@ class Mmateri extends CI_Model
         $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
         $this->db->join($this->table_pengguna, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_pengguna . '.id_pengguna');
         $this->db->where($this->table . '.id_mata_pelajaran_guru', $id_mata_pelajaran_guru);
+        if (trim($jenis) != "") {
+          $this->db->where($this->table . '.jenis', $jenis);
+        }
 
+        if (trim($keyword) != "") {
+            $this->db->like('nama_materi', $keyword);
+        }
+        if (array_key_exists('order', $option)) {
+            $this->db->order_by($this->table . "." . $option['order']['order_by'], $option['order']['ordering']);
+        }
+
+        if ($option != null) {
+            if (array_key_exists('limit', $option)) {
+                $this->db->limit($this->table . "." . $option['limit']);
+            }
+
+            if (array_key_exists('order_by', $option)) {
+                $this->db->order_by($this->table . "." . $option['order_by']['field'], $option['order_by']['option']);
+            }
+
+            if (array_key_exists('page', $option)) {
+                $page = $option['page'] * $option['limit'];
+                $this->db->limit($option['limit'], $page);
+            }
+
+            if (array_key_exists('where_in', $option)) {
+                $this->db->where_in($this->table . '.' . $option['where_in']['field'], $option['where_in']['option']);
+            }
+
+            if (array_key_exists('where_not_in', $option)) {
+                $this->db->where_not_in($this->table . '.' . $option['where_not_in']['field'], $option['where_not_in']['option']);
+            }
+        }
         if ($result_type == "row") {
             return $this->db->get($this->table)->row();
         } else {

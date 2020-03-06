@@ -27,9 +27,44 @@ class Materi extends REST_Controller
     public function findBySiswa_post()
     {
         $id_mata_pelajaran_guru= $this->input->post('id_mata_pelajaran_guru');
+        $jenis= $this->input->post('jenis');
 
         $arr_result = array();
-        $data_jadwal=$this->Mmateri->findBySiswaModel($id_mata_pelajaran_guru, 'result');
+        $keyword             = "";
+        $order_by            = 'id_materi';
+        $ordering            = "desc";
+        $limit               = 100;
+        $page                = 0;
+
+        if (isset($_POST['keyword'])) {
+            $keyword = $this->input->post('keyword');
+        }
+
+        if (isset($_POST['order_by'])) {
+            $order_by = $this->input->post('order_by');
+        }
+
+        if (isset($_POST['ordering'])) {
+            $ordering = $this->input->post('ordering');
+        }
+
+        if (isset($_POST['limit'])) {
+            $limit = $this->input->post('limit');
+        }
+
+        if (isset($_POST['page'])) {
+            $page = $this->input->post('page');
+        }
+
+        $option = array(
+            'limit' => $limit,
+            'page'  => $page,
+            'order' => array(
+                'order_by' => $order_by,
+                'ordering' => $ordering,
+            ),
+        );
+        $data_jadwal=$this->Mmateri->findBySiswaModel($id_mata_pelajaran_guru, 'result', $jenis, $keyword, $option);
 
 
         if ($id_mata_pelajaran_guru == "") {
@@ -61,8 +96,9 @@ class Materi extends REST_Controller
         print json_encode($arr_result);
     }
 
-    function findKomen_get($id_materi) {
-        $data = $this->Mmateri->findKomenModel($id_materi,'result');
+    public function findKomen_get($id_materi)
+    {
+        $data = $this->Mmateri->findKomenModel($id_materi, 'result');
         $arr_result = array(
         'prilude' => array(
             'status' => 'success',
