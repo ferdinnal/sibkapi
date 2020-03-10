@@ -65,7 +65,7 @@ class Komen_materi extends REST_Controller
             ),
         );
         $data_jadwal=$this->Mkomenmateri->findBySiswaModel($id_materi, 'result', $keyword, $option);
-  
+
 
 
         if ($id_materi == "") {
@@ -96,48 +96,162 @@ class Komen_materi extends REST_Controller
 
         print json_encode($arr_result);
     }
+    public function findBalesSiswa_post()
+    {
+        $id_materi_komen_referal= $this->input->post('id_materi_komen_referal');
 
-    function create_post() {
-      $date_created=date('Y-m-d H:i:s');
+        $arr_result = array();
+        $keyword             = "";
+        $order_by            = 'id_materi_komen';
+        $ordering            = "desc";
+        $limit               = 100;
+        $page                = 0;
 
-      if ($this->input->post('id_materi_komen') == null) {
-        $data = array(
+        if (isset($_POST['keyword'])) {
+            $keyword = $this->input->post('keyword');
+        }
+
+        if (isset($_POST['order_by'])) {
+            $order_by = $this->input->post('order_by');
+        }
+
+        if (isset($_POST['ordering'])) {
+            $ordering = $this->input->post('ordering');
+        }
+
+        if (isset($_POST['limit'])) {
+            $limit = $this->input->post('limit');
+        }
+
+        if (isset($_POST['page'])) {
+            $page = $this->input->post('page');
+        }
+
+        $option = array(
+            'limit' => $limit,
+            'page'  => $page,
+            'order' => array(
+                'order_by' => $order_by,
+                'ordering' => $ordering,
+            ),
+        );
+        $data_jadwal=$this->Mkomenmateri->findByBalesSiswaModel($id_materi_komen_referal, 'result', $keyword, $option);
+
+
+
+        if ($id_materi_komen_referal == "") {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'error',
+                    'message' => 'Coba Ulangi Lagi'
+                )
+            );
+        } else {
+            if (count($data_jadwal)==0) {
+                $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'warning',
+                     'message' => 'Materi Tidak Ditemukan'
+                 )
+             );
+            } else {
+                $arr_result = array(
+                'prilude' => array(
+                    'status' => 'success',
+                    'message' => 'Data Pengguna Ditemukan.',
+                    'data_materi'     => $data_jadwal,
+                )
+            );
+            }
+        }
+
+        print json_encode($arr_result);
+    }
+    public function create_post()
+    {
+        $date_created=date('Y-m-d H:i:s');
+
+        if ($this->input->post('id_materi_komen') == null) {
+            $data = array(
           'id_pengguna' => $this->input->post('id_pengguna'),
           'isi' => $this->input->post('isi'),
           'id_materi' => $this->input->post('id_materi'),
           'date_created' => $date_created,
        );
-      }else {
-        $data = array(
+        } else {
+            $data = array(
           'id_pengguna' => $this->input->post('id_pengguna'),
           'isi' => $this->input->post('isi'),
           'id_materi' => $this->input->post('id_materi'),
           'id_materi_komen_referal' => $this->input->post('id_materi_komen'),
           'date_created' => $date_created,
        );
-      }
+        }
 
         $arr_result = array();
 
-          if ($this->Mkomenmateri->create($data))
-           {
+        if ($this->Mkomenmateri->create($data)) {
+            $arr_result = array();
+            $keyword             = "";
+            $order_by            = 'id_materi_komen';
+            $ordering            = "DESC";
+            $limit               = 1;
+            $page                = 0;
 
-             $arr_result = array(
+            if (isset($_POST['keyword'])) {
+                $keyword = $this->input->post('keyword');
+            }
+
+            if (isset($_POST['order_by'])) {
+                $order_by = $this->input->post('order_by');
+            }
+
+            if (isset($_POST['ordering'])) {
+                $ordering = $this->input->post('ordering');
+            }
+
+            if (isset($_POST['limit'])) {
+                $limit = $this->input->post('limit');
+            }
+
+            if (isset($_POST['page'])) {
+                $page = $this->input->post('page');
+            }
+
+            $option = array(
+                 'limit' => $limit,
+                 'page'  => $page,
+                 'order' => array(
+                     'order_by' => $order_by,
+                     'ordering' => $ordering,
+                 ),
+             );
+            if ($this->input->post('id_materi_komen') == null) {
+              $id_materi= $this->input->post('id_materi');
+              $data_jadwal=$this->Mkomenmateri->findBySiswaModel($id_materi, 'result', $keyword, $option);
+            } else {
+              $id_materi_komen_referal= $this->input->post('id_materi_komen');
+              $data_jadwal=$this->Mkomenmateri->findByBalesSiswaModel($id_materi_komen_referal, 'result', $keyword, $option);
+
+            }
+
+
+            $arr_result = array(
                  'prilude' => array(
                      'status' => 'success',
-                     'message' => 'Data diupdate.',
+                     'message' => 'Data tersimpan.',
+                     'data_materi' => $data_jadwal,
                  )
              );
-          }else {
+        } else {
             $arr_result = array(
                 'prilude' => array(
                     'status' => 'warning',
-                    'message' => 'Data Tidak diupdate.'
+                    'message' => 'Gagal menambahkan komentar.'
                 )
             );
-          }
+        }
 
         print json_encode($arr_result);
     }
-
 }
