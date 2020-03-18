@@ -14,7 +14,7 @@ class Materi extends REST_Controller
     private $arr_result = array();
     private $table                      = "materi";
     private $field_list = array('id_materi', 'nama_materi', 'deskripsi_materi', 'date_created'
-            , 'id_mata_pelajaran_guru', 'jenis');
+            , 'id_mata_pelajaran_guru', 'jenis','is_upload','waktu_tenggang');
     private $exception_field            = array();
     private $primary_key                = "id_materi";
     public function __construct()

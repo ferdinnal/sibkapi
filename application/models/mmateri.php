@@ -12,7 +12,7 @@ class Mmateri extends CI_Model
     private $table_mata_pelajaran= "mata_pelajaran";
     private $table_materi_komen= "materi_komen";
     private $field_list = array('id_materi', 'nama_materi', 'deskripsi_materi', 'date_created'
-          , 'id_mata_pelajaran_guru', 'jenis');
+          , 'id_mata_pelajaran_guru', 'jenis','is_upload','waktu_tenggang');
     private $exception_field = array('');
     public function __construct()
     {
@@ -33,6 +33,8 @@ class Mmateri extends CI_Model
         $this->db->select($this->table.".jenis");
         $this->db->select($this->table.".id_mata_pelajaran_guru");
         $this->db->select($this->table.".id_materi");
+        $this->db->select($this->table.".waktu_tenggang");
+        $this->db->select($this->table.".is_upload");
         $this->db->select($this->table_pengguna.".nama_pengguna");
         $this->db->select($this->table_pengguna.".gambar_profil");
         $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
