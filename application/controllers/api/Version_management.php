@@ -20,8 +20,8 @@ class Version_management extends REST_Controller
     public function is_need_update_post()
     {
         $current_version=$this->input->post('current_version');
-        $query = array();
-        $data=$this->Mversion_management->isNeedUpdate($query, 'row');
+        $aplikasi_id=$this->input->post('aplikasi_id');
+        $data=$this->Mversion_management->isNeedUpdate($aplikasi_id, 'row');
         if ($data->nama_versi > $current_version) {
             $arr_result = array(
                             'prilude' => array(
