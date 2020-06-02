@@ -15,18 +15,6 @@ class Mversion_management extends CI_Model
     {
         $select = "";
 
-        for ($i = 0; $i < count($this->field_list); $i++) {
-            if (array_key_exists($this->field_list[$i], $query)) {
-                $this->db->where($this->field_list[$i], $query[$this->field_list[$i]]);
-            }
-        }
-
-        for ($i = 0; $i < count($this->field_list); $i++) {
-            if (!in_array($this->field_list[$i], $this->exception_field)) {
-                $select.=$this->field_list[$i] . ",";
-            }
-        }
-
         $this->db->select($select);
         $this->db->order_by('id_manajemen_versi', 'DESC');
         $this->db->limit('1');

@@ -41,4 +41,50 @@ class Pelajaran extends REST_Controller
         }
         print json_encode($arr_result);
     }
+
+    public function findByGuru_post()
+    {
+        $id_pengguna=$this->input->post('id_pengguna');
+        $id_kelas=$this->input->post('id_kelas');
+        $data_slider=$this->Mpelajaran->find_guru_all($id_pengguna, $id_kelas, 'result');
+        if (count($data_slider)>0) {
+            $arr_result = array(
+                            'prilude' => array(
+                                    'status' => 'success',
+                                    'message' => 'Data berhasil ditemukan.',
+                                    'data_pelajaran'    =>  $data_slider,
+                            )
+                    );
+        } else {
+            $arr_result = array(
+                            'prilude' => array(
+                                    'status' => 'warning',
+                                    'message' => 'Silahkan ganti kata kunci.',
+                            )
+                    );
+        }
+        print json_encode($arr_result);
+    }
+    public function findkelasGuru_post()
+    {
+        $id_pengguna=$this->input->post('id_pengguna');
+        $data_slider=$this->Mpelajaran->find_guru_kelas($id_pengguna, 'result');
+        if (count($data_slider)>0) {
+            $arr_result = array(
+                            'prilude' => array(
+                                    'status' => 'success',
+                                    'message' => 'Data berhasil ditemukan.',
+                                    'data_pelajaran'    =>  $data_slider,
+                            )
+                    );
+        } else {
+            $arr_result = array(
+                            'prilude' => array(
+                                    'status' => 'warning',
+                                    'message' => 'Silahkan ganti kata kunci.',
+                            )
+                    );
+        }
+        print json_encode($arr_result);
+    }
 }
