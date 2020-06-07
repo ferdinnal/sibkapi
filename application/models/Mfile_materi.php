@@ -28,7 +28,7 @@ class Mfile_materi extends CI_Model
             return $this->db->get($this->table)->result();
         }
     }
-    public function findBySiswaModelId($id_materi,$idPengguna, $result_type)
+    public function findBySiswaModelId($id_materi, $idPengguna, $result_type)
     {
         $select = "";
 

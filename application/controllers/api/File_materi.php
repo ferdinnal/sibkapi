@@ -21,6 +21,7 @@ class File_materi extends REST_Controller
     {
         parent::__construct();
         $this->load->model('Mfile_materi');
+        $this->load->model('Mmateri');
     }
 
 
@@ -64,7 +65,7 @@ class File_materi extends REST_Controller
         $idMateri= $this->input->post('id_materi');
         $idPengguna= $this->input->post('id_pengguna');
 
-        $data_jadwal=$this->Mfile_materi->findBySiswaModelId($idMateri,$idPengguna, 'result');
+        $data_jadwal=$this->Mfile_materi->findBySiswaModelId($idMateri, $idPengguna, 'result');
 
 
         if ($idMateri == "") {
@@ -144,5 +145,98 @@ class File_materi extends REST_Controller
             }
             print json_encode($arr_result);
         }
+    }
+
+    public function tambah_materi_post()
+    {
+        $this->load->library('upload');
+        $nama_file= $this->input->post('nama_file');
+        $file= $this->input->post('fileNa');
+        $jenis_file= $this->input->post('jenis_file');
+        $id_pengguna= $this->input->post('id_pengguna');
+        $is_upload= $this->input->post('is_upload');
+        $dateTime = date("Y-m-d h:i:s");
+        if ($is_upload == 1) {
+            $config['upload_path'] = './file/';
+            $config['allowed_types'] = 'xlsx|xls|doc|docx|ppt|pptx|pdf';
+            // load library upload
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            if (!$this->upload->do_upload('fileNa')) {
+                $error = $this->upload->display_errors();
+                // menampilkan pesan error
+                print_r($error);
+            } else {
+                $result = $this->upload->data();
+                $json2=json_encode($result);
+                $json = json_decode($json2, true);
+                $file_name = $json['file_name'];
+                $data_materi = array(
+                'nama_materi' => $this->input->post('nama_materi'),
+                'deskripsi_materi' => $this->input->post('deskripsi_materi'),
+                'id_mata_pelajaran_guru' => $this->input->post('id_mata_pelajaran_guru'),
+                'jenis' => $this->input->post('jenis'),
+                'is_upload' => $this->input->post('is_upload'),
+                'waktu_tenggang' => $this->input->post('waktu_tenggang'),
+                'date_created' => $dateTime,
+
+             );
+                $id_materi=$this->Mmateri->create($data_materi);
+                $data = array(
+                'file' => $file_name,
+                'nama_file' => $nama_file,
+                'jenis_file' => $jenis_file,
+                'id_materi' => $id_materi,
+                'is_selesai' => '1',
+                'id_pengguna' => $id_pengguna,
+                'is_tugas_guru' => $this->input->post('is_tugas_guru'),
+             );
+                $simpan=$this->Mfile_materi->create($data);
+                if ($simpan) {
+                    $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'success',
+                     'message' => 'Upload Berhasil'
+                 )
+             );
+                } else {
+                    $arr_result = array(
+              'prilude' => array(
+                  'status' => 'error',
+                  'message' => 'Upload Gagal, silahkan coba lagi.'
+              )
+          );
+                }
+            }
+        } else {
+            $data_materi = array(
+          'nama_materi' => $this->input->post('nama_materi'),
+          'deskripsi_materi' => $this->input->post('deskripsi_materi'),
+          'id_mata_pelajaran_guru' => $this->input->post('id_mata_pelajaran_guru'),
+          'jenis' => $this->input->post('jenis'),
+          'is_upload' => $this->input->post('is_upload'),
+          'waktu_tenggang' => $this->input->post('waktu_tenggang'),
+          'date_created' => $dateTime,
+
+       );
+            $simpan=$this->Mmateri->createNew($data_materi);
+            if ($simpan) {
+                $arr_result = array(
+           'prilude' => array(
+               'status' => 'success',
+               'message' => 'Upload Berhasil'
+           )
+       );
+            } else {
+                $arr_result = array(
+        'prilude' => array(
+            'status' => 'error',
+            'message' => 'Upload Gagal, silahkan coba lagi.'
+        )
+      );
+            }
+        }
+        print json_encode($arr_result);
+        
     }
 }

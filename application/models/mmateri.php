@@ -41,7 +41,7 @@ class Mmateri extends CI_Model
         $this->db->join($this->table_pengguna, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_pengguna . '.id_pengguna');
         $this->db->where($this->table . '.id_mata_pelajaran_guru', $id_mata_pelajaran_guru);
         if (trim($jenis) != "") {
-          $this->db->where($this->table . '.jenis', $jenis);
+            $this->db->where($this->table . '.jenis', $jenis);
         }
 
         if (trim($keyword) != "") {
@@ -79,7 +79,22 @@ class Mmateri extends CI_Model
             return $this->db->get($this->table)->result();
         }
     }
-
+    public function create($data)
+    {
+        if ($this->db->insert($this->table, $data)) {
+            return $insert_id=$this->db->insert_id();
+        } else {
+            return false;
+        }
+    }
+    public function createNew($data)
+    {
+        if ($this->db->insert($this->table, $data)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function findKomenModel($id_materi, $result_type, $option = null)
     {
         $select = "";
