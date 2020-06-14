@@ -27,6 +27,7 @@ class Materi extends REST_Controller
     public function findBySiswa_post()
     {
         $id_mata_pelajaran_guru= $this->input->post('id_mata_pelajaran_guru');
+        $id_kelas= $this->input->post('id_kelas');
         $jenis= $this->input->post('jenis');
 
         $arr_result = array();
@@ -64,7 +65,7 @@ class Materi extends REST_Controller
                 'ordering' => $ordering,
             ),
         );
-        $data_jadwal=$this->Mmateri->findBySiswaModel($id_mata_pelajaran_guru, 'result', $jenis, $keyword, $option);
+        $data_jadwal=$this->Mmateri->findBySiswaModel($id_mata_pelajaran_guru,$id_kelas, 'result', $jenis, $keyword, $option);
 
 
         if ($id_mata_pelajaran_guru == "") {

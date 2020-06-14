@@ -195,4 +195,29 @@ class Notifikasi extends REST_Controller
 
     $this->response($this->arr_result);
   }
+
+  // public function tambah_guru_post()
+  // {
+  //   $this->input->post()
+  //     $data_notifikasi = $this->Mnotifikasi->tambah();
+  //
+  //     if (count($data_notifikasi)==0) {
+  //         $this->arr_result = array(
+  //     'prilude' =>  array(
+  //       'status'  =>  'warning',
+  //       'message' =>  'Anda belum memiliki notifikasi terbaru.'
+  //     )
+  //   );
+  //     } else {
+  //         $this->arr_result = array(
+  //     'prilude' =>  array(
+  //       'status'  =>  'success',
+  //       'message' =>  'Notifikasi tersedia',
+  //       'data'    =>  $data_notifikasi
+  //     )
+  //   );
+  //     }
+  //
+  //     $this->response($this->arr_result);
+  // }
 }

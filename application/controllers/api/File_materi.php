@@ -22,6 +22,8 @@ class File_materi extends REST_Controller
         parent::__construct();
         $this->load->model('Mfile_materi');
         $this->load->model('Mmateri');
+        $this->load->model('Msiswa');
+        $this->load->model('Mnotifikasi');
     }
 
 
@@ -63,9 +65,45 @@ class File_materi extends REST_Controller
     public function find_file_materi_bysiswaid_post()
     {
         $idMateri= $this->input->post('id_materi');
+        $id_pengguna= $this->input->post('id_pengguna');
+
+        $data_jadwal=$this->Mfile_materi->findByGuru($idMateri, $id_pengguna, 'result');
+
+
+        if ($idMateri == "") {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'error',
+                    'message' => 'Coba Ulangi Lagi'
+                )
+            );
+        } else {
+            if (count($data_jadwal)==0) {
+                $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'warning',
+                     'message' => 'Materi Tidak Ditemukan'
+                 )
+             );
+            } else {
+                $arr_result = array(
+                'prilude' => array(
+                    'status' => 'success',
+                    'message' => 'Data Pengguna Ditemukan.',
+                    'data_materi'     => $data_jadwal,
+                )
+            );
+            }
+        }
+
+        print json_encode($arr_result);
+    }
+    public function find_file_materi_byFileGuru_post()
+    {
+        $idMateri= $this->input->post('id_materi');
         $idPengguna= $this->input->post('id_pengguna');
 
-        $data_jadwal=$this->Mfile_materi->findBySiswaModelId($idMateri, $idPengguna, 'result');
+        $data_jadwal=$this->Mfile_materi->findByGuru($idMateri, $idPengguna, 'result');
 
 
         if ($idMateri == "") {
@@ -155,6 +193,7 @@ class File_materi extends REST_Controller
         $jenis_file= $this->input->post('jenis_file');
         $id_pengguna= $this->input->post('id_pengguna');
         $is_upload= $this->input->post('is_upload');
+        $id_kelas= $this->input->post('id_kelas');
         $dateTime = date("Y-m-d h:i:s");
         if ($is_upload == 1) {
             $config['upload_path'] = './file/';
@@ -178,6 +217,7 @@ class File_materi extends REST_Controller
                 'jenis' => $this->input->post('jenis'),
                 'is_upload' => $this->input->post('is_upload'),
                 'waktu_tenggang' => $this->input->post('waktu_tenggang'),
+                'id_kelas' => $this->input->post('id_kelas'),
                 'date_created' => $dateTime,
 
              );
@@ -193,12 +233,41 @@ class File_materi extends REST_Controller
              );
                 $simpan=$this->Mfile_materi->create($data);
                 if ($simpan) {
-                    $arr_result = array(
-                 'prilude' => array(
-                     'status' => 'success',
-                     'message' => 'Upload Berhasil'
-                 )
-             );
+                    $dataNa = array('id_kelas' =>$id_kelas , );
+                    $dataSiswa=$this->Msiswa->find($dataNa, 'result');
+                    $i = 0;
+                    $len = count($dataSiswa);
+                    $jenisNa="";
+                    $message="";
+                    if ($this->input->post('jenis') == 1) {
+                        $jenisNa="Ada Materi Baru";
+                        $message="Ada Materi Baru, silahkan untuk mengeceknya!";
+                    } else {
+                        $jenisNa="Ada Tugas Baru";
+                        $message="Ada Tugas Baru, silahkan untuk mengeceknya!";
+                    }
+                    foreach ($dataSiswa as $siswaNa) {
+                        $notifNa = array(
+                        'timestamp' =>$dateTime ,
+                        'title' =>$jenisNa ,
+                        'message' =>$message ,
+                        'id_pengguna' =>$siswaNa->id_pengguna ,
+                        'is_read' =>0 ,
+                        'extra' =>$id_materi ,
+                        'intent_id' =>1 ,
+                        'aplikasi_id' =>5 ,
+                     );
+                        $this->Mnotifikasi->create($notifNa);
+                        if ($i == $len - 1) {
+                            $arr_result = array(
+                       'prilude' => array(
+                           'status' => 'success',
+                           'message' => 'Upload Berhasil'
+                       )
+                   );
+                        }
+                        $i++;
+                    }
                 } else {
                     $arr_result = array(
               'prilude' => array(
@@ -221,12 +290,41 @@ class File_materi extends REST_Controller
        );
             $simpan=$this->Mmateri->createNew($data_materi);
             if ($simpan) {
-                $arr_result = array(
-           'prilude' => array(
-               'status' => 'success',
-               'message' => 'Upload Berhasil'
-           )
-       );
+                $dataNa = array('id_kelas' =>$id_kelas , );
+                $dataSiswa=$this->Msiswa->find($dataNa, 'result');
+                $i = 0;
+                $len = count($dataSiswa);
+                $jenisNa="";
+                $message="";
+                if ($this->input->post('jenis') == 1) {
+                    $jenisNa="Ada Materi Baru";
+                    $message="Ada Materi Baru, silahkan untuk mengeceknya!";
+                } else {
+                    $jenisNa="Ada Tugas Baru";
+                    $message="Ada Tugas Baru, silahkan untuk mengeceknya!";
+                }
+                foreach ($dataSiswa as $siswaNa) {
+                    $notifNa = array(
+                  'timestamp' =>$dateTime ,
+                  'title' =>$jenisNa ,
+                  'message' =>$message ,
+                  'id_pengguna' =>$siswaNa->id_pengguna ,
+                  'is_read' =>0 ,
+                  'extra' =>$id_materi ,
+                  'intent_id' =>1 ,
+                  'aplikasi_id' =>5 ,
+               );
+                    $this->Mnotifikasi->create($notifNa);
+                    if ($i == $len - 1) {
+                        $arr_result = array(
+                 'prilude' => array(
+                     'status' => 'success',
+                     'message' => 'Upload Berhasil'
+                 )
+             );
+                    }
+                    $i++;
+                }
             } else {
                 $arr_result = array(
         'prilude' => array(
@@ -237,6 +335,5 @@ class File_materi extends REST_Controller
             }
         }
         print json_encode($arr_result);
-        
     }
 }

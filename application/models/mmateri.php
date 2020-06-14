@@ -20,7 +20,7 @@ class Mmateri extends CI_Model
         $this->load->model('Mpengaturan');
     }
 
-    public function findBySiswaModel($id_mata_pelajaran_guru, $result_type, $jenis=null, $keyword = null, $option = null)
+    public function findBySiswaModel($id_mata_pelajaran_guru, $id_kelas, $result_type, $jenis=null, $keyword = null, $option = null)
     {
         $select = "";
 
@@ -40,6 +40,7 @@ class Mmateri extends CI_Model
         $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
         $this->db->join($this->table_pengguna, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_pengguna . '.id_pengguna');
         $this->db->where($this->table . '.id_mata_pelajaran_guru', $id_mata_pelajaran_guru);
+        $this->db->where($this->table . '.id_kelas', $id_kelas);
         if (trim($jenis) != "") {
             $this->db->where($this->table . '.jenis', $jenis);
         }

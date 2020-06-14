@@ -20,6 +20,26 @@ class Mfile_materi extends CI_Model
 
         $this->db->select($this->table.".*");
         $this->db->where($this->table . '.id_materi', $id_materi);
+        $this->db->where($this->table . '.is_tugas_guru', '1');
+
+
+        if ($result_type == "row") {
+            return $this->db->get($this->table)->row();
+        } else {
+            return $this->db->get($this->table)->result();
+        }
+    }
+
+    public function findByGuru($id_materi,$id_pengguna, $result_type)
+    {
+        $select = "";
+
+        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+
+        $this->db->select($this->table.".*");
+        $this->db->where($this->table . '.id_materi', $id_materi);
+        $this->db->where($this->table . '.id_pengguna', $id_pengguna);
+        $this->db->where($this->table . '.is_tugas_guru', '0');
 
 
         if ($result_type == "row") {
