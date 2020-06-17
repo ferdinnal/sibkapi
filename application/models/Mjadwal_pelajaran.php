@@ -382,4 +382,13 @@ class Mjadwal_pelajaran extends CI_Model
 
         return $result;
     }
+
+    public function update($data, $where)
+    {
+        if ($this->db->update($this->table, $data, $where)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
