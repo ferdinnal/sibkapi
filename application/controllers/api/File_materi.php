@@ -142,8 +142,10 @@ class File_materi extends REST_Controller
         $jenis_file= $this->input->post('jenis_file');
         $id_materi= $this->input->post('id_materi');
         $id_pengguna= $this->input->post('id_pengguna');
+        $id_guru= $this->input->post('id_guru');
         $config['upload_path'] = './file/';
         $config['allowed_types'] = 'xlsx|xls|doc|docx|ppt|pptx|pdf';
+        $dateTime = date("Y-m-d h:i:s");
 
         // load library upload
         $this->load->library('upload', $config);
@@ -166,6 +168,19 @@ class File_materi extends REST_Controller
               'id_pengguna' => $id_pengguna,
            );
             $simpan=$this->Mfile_materi->create($data);
+            $jenisNa="Ada Pengumpulan Tugas Baru";
+            $message="Ada Pengumpulan Tugas Baru, silahkan untuk mengeceknya!";
+            $notifNa = array(
+                'timestamp' =>$dateTime ,
+                'title' =>$jenisNa ,
+                'message' =>$message ,
+                'id_pengguna' =>$id_guru ,
+                'is_read' =>0 ,
+                'extra' =>$id_materi ,
+                'intent_id' =>5 ,
+                'aplikasi_id' =>2 ,
+                 );
+            $this->Mnotifikasi->create($notifNa);
             if ($simpan) {
                 $arr_result = array(
                'prilude' => array(
@@ -254,8 +269,8 @@ class File_materi extends REST_Controller
                         'id_pengguna' =>$siswaNa->id_pengguna ,
                         'is_read' =>0 ,
                         'extra' =>$id_materi ,
-                        'intent_id' =>1 ,
-                        'aplikasi_id' =>5 ,
+                        'intent_id' =>5 ,
+                        'aplikasi_id' =>1 ,
                      );
                         $this->Mnotifikasi->create($notifNa);
                         if ($i == $len - 1) {

@@ -44,7 +44,40 @@ class Mabsensi extends CI_Model
         //return $data_image;
         return $data_product;
     }
+    public function find_jadwal_order($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran)
+    {
+        $this->db->select($this->table_jadwal_pelajaran.".jam_mulai");
+        $this->db->select($this->table_jadwal_pelajaran.".jam_beres");
+        $this->db->select($this->table_jadwal_pelajaran.".id_kelas");
+        $this->db->select($this->table_jadwal_pelajaran.".hari");
+        $this->db->select($this->table_jadwal_pelajaran.".qr_code_absensi");
+        $this->db->select("'$hari_ini' as hari_now");
+        $this->db->select($this->table.".qr_code_absensi");
+        $this->db->select($this->table.".history_qr_code_id");
+        $this->db->join($this->table_mata_pelajaran_guru, $this->table_jadwal_pelajaran . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
+        $this->db->join($this->table, $this->table_jadwal_pelajaran . '.id_jadwal_pelajaran = ' . $this->table . '.id_jadwal_pelajaran');
+        $this->db->where($this->table_jadwal_pelajaran . '.id_jadwal_pelajaran', $id_jadwal_pelajaran);
+        $this->db->where($this->table_jadwal_pelajaran . '.hari', $hari_ini);
+        $this->db->where($this->table_mata_pelajaran_guru . '.id_guru', $id_pengguna);
+        $this->db->order_by($this->table.".date_created", 'desc');
 
+        $data_product = $this->db->get($this->table_jadwal_pelajaran)->row();
+
+        //array_push($data_product,$data_image);
+        //return $data_image;
+        return $data_product;
+    }
+    public function find_jadwal_now($id_pengguna, $id_kelas, $hari_ini, $nowTime, $id_jadwal_pelajaran)
+    {
+        $query = "SELECT tj.id_kelas,tj.jam_mulai,tj.jam_beres,tj.hari,tj.qr_code_absensi,hq.qr_code_absensi,hq.history_qr_code_id,$hari_ini as hari_now
+         FROM jadwal_pelajaran tj, mata_pelajaran_guru tpg, history_qr_code hq
+        WHERE tj.id_mata_pelajaran_guru=tpg.id_mata_pelajaran_guru AND tj.id_jadwal_pelajaran=hq.id_jadwal_pelajaran
+        AND tj.id_jadwal_pelajaran='".$id_jadwal_pelajaran."' AND tj.hari='".$hari_ini."' AND date(hq.date_created)='".$nowTime."' AND tpg.id_guru='".$id_pengguna."'";
+
+        $result = $this->db->query($query)->row();
+
+        return $result;
+    }
     public function find_jadwal3($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran)
     {
         $this->db->select($this->table_jadwal_pelajaran.".jam_mulai");
@@ -85,7 +118,7 @@ class Mabsensi extends CI_Model
         return $data_product;
     }
 
-    public function find_hari($id_pengguna, $id_kelas, $hari_ini,$id_jadwal_pelajaran)
+    public function find_hari($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran)
     {
         $this->db->select($this->table_jadwal_pelajaran.".jam_mulai");
         $this->db->select($this->table_jadwal_pelajaran.".jam_beres");
@@ -113,6 +146,54 @@ class Mabsensi extends CI_Model
         //array_push($data_product,$data_image);
         //return $data_image;
         return $data_product;
+    }
+    public function find_hari_siswa($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran)
+    {
+        $this->db->select($this->table_jadwal_pelajaran.".jam_mulai");
+        $this->db->select($this->table_jadwal_pelajaran.".jam_beres");
+        $this->db->select($this->table_jadwal_pelajaran.".id_kelas");
+        $this->db->select($this->table_jadwal_pelajaran.".hari");
+        $this->db->select($this->table_jadwal_pelajaran.".qr_code_absensi");
+        $this->db->select($this->table_jadwal_pelajaran.".id_jadwal_pelajaran");
+        $this->db->select($this->table.".qr_code_absensi");
+        $this->db->select($this->table.".history_qr_code_id");
+        $this->db->select($this->table.".date_created");
+        $this->db->select($this->table_kelas.".nama_kelas");
+        $this->db->select($this->table_mata_pelajaran.".nama_mata_pelajaran");
+        $this->db->select($this->table_mata_pelajaran.".kode_mata_pelajaran");
+        $this->db->join($this->table_mata_pelajaran_guru, $this->table_jadwal_pelajaran . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
+        $this->db->join($this->table, $this->table_jadwal_pelajaran . '.id_jadwal_pelajaran = ' . $this->table . '.id_jadwal_pelajaran');
+        $this->db->join($this->table_kelas, $this->table_jadwal_pelajaran . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
+        $this->db->join($this->table_mata_pelajaran, $this->table_mata_pelajaran_guru . '.id_mata_pelajaran = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran');
+        $this->db->where($this->table_jadwal_pelajaran . '.id_jadwal_pelajaran', $id_jadwal_pelajaran);
+        $this->db->where($this->table_jadwal_pelajaran . '.hari', $hari_ini);
+        $this->db->where($this->table_kelas . '.id_kelas', $id_kelas);
+        $this->db->order_by($this->table.".date_created", 'desc');
+        $this->db->group_by($this->table.".history_qr_code_id");
+
+        $data_product = $this->db->get($this->table_jadwal_pelajaran)->result();
+
+        //array_push($data_product,$data_image);
+        //return $data_image;
+        return $data_product;
+    }
+
+    public function absensi_siswa_check($latitude, $longitude, $nowTime, $id_kelas, $history_qr_code_id, $hari_ini, $qr_code_absensi)
+    {
+        $this->load->model('Mpengaturan');
+        $max_distance_absensi=$this->Mpengaturan->findByName('JARAK_ABSENSI_SISWA')->nilai_pengaturan;
+        $query = "SELECT tj.id_kelas,tj.jam_mulai,tj.jam_beres,tj.hari,tj.qr_code_absensi,hq.qr_code_absensi,hq.history_qr_code_id,$hari_ini as hari_now,
+        (6371 * acos( cos( radians(" . $latitude . ") ) * cos( radians( r.latitude ) ) *
+								cos( radians( r.longitude ) - radians(" . $longitude . ") ) + sin( radians(" . $latitude . ") ) *
+								sin( radians( r.latitude ) ) ) ) AS distance
+       FROM jadwal_pelajaran tj, mata_pelajaran_guru tpg, history_qr_code hq,ruangan r
+      WHERE tj.id_mata_pelajaran_guru=tpg.id_mata_pelajaran_guru AND tj.id_jadwal_pelajaran=hq.id_jadwal_pelajaran AND tj.id_ruangan=r.id_ruangan
+      AND hq.day='".$hari_ini."' AND date(hq.date_created)='".$nowTime."'
+      AND hq.history_qr_code_id='".$history_qr_code_id."' AND hq.qr_code_absensi='".$qr_code_absensi."' AND tj.id_kelas='".$id_kelas."' having distance < ".$max_distance_absensi."";
+
+        $result = $this->db->query($query)->row();
+
+        return $result;
     }
 
     public function find_absensi_siswa($history_qr_code_id)

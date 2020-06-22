@@ -37,6 +37,7 @@ class Mmateri extends CI_Model
         $this->db->select($this->table.".is_upload");
         $this->db->select($this->table_pengguna.".nama_pengguna");
         $this->db->select($this->table_pengguna.".gambar_profil");
+        $this->db->select($this->table_pengguna.".id_pengguna");
         $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
         $this->db->join($this->table_pengguna, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_pengguna . '.id_pengguna');
         $this->db->where($this->table . '.id_mata_pelajaran_guru', $id_mata_pelajaran_guru);
