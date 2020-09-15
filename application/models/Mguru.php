@@ -2,10 +2,10 @@
 
 class Mguru extends CI_Model
 {
-    private $table = "detail_guru";
-    private $field_list = array('id_detail_guru', 'nip', 'id_pengguna');
+    private $table = "gurudetails";
+    private $field_list = array('gurudetailid', 'userid');
     private $exception_field = array('');
-    private $key_user_id = "id_detail_guru";
+    private $key_user_id = "gurudetailid";
 
     public function __construct()
     {

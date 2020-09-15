@@ -1,11 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-use Restserver\Libraries\REST_Controller;
 
-require APPPATH . 'libraries/REST_Controller.php';
-require APPPATH . 'libraries/Format.php';
-
-class Version_management extends REST_Controller
+class Version_management extends CI_Controller
 {
     private $arr_result = array();
     private $field_list = array('id_manajemen_versi', 'kode_versi', 'nama_versi', 'judul_notifikasi'
@@ -17,14 +13,13 @@ class Version_management extends REST_Controller
     }
 
 
-    public function is_need_update_post()
+    public function is_need_update()
     {
         $current_version=$this->input->post('current_version');
-        $aplikasi_id=$this->input->post('aplikasi_id');
-        $data=$this->Mversion_management->isNeedUpdate($aplikasi_id, 'row');
+        $data=$this->Mversion_management->isNeedUpdate('row');
         if ($data->nama_versi > $current_version) {
             $arr_result = array(
-                            'prilude' => array(
+                            'sibk' => array(
                                     'status' => 'ada',
                                     'message' => 'Ada Pembaruan.',
                                     'data' => $data,
@@ -32,7 +27,7 @@ class Version_management extends REST_Controller
                     );
         } else {
             $arr_result = array(
-                         'prilude' => array(
+                         'sibk' => array(
                                  'status' => 'success',
                                  'message' => 'Pembaruan tidak ditemukan.',
                                  'data' => $data,

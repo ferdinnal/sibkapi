@@ -1,5 +1,4 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
 class Mabsensi extends CI_Model
 {
     private $table      = "history_qr_code";
@@ -8,8 +7,8 @@ class Mabsensi extends CI_Model
     private $table_jadwal_pelajaran     = "jadwal_pelajaran";
     private $table_mata_pelajaran_guru    = "mata_pelajaran_guru";
     private $table_mata_pelajaran   = "mata_pelajaran";
-    private $table_detail_siswa   = "detail_siswa";
-    private $table_pengguna   = "pengguna";
+    private $table_detail_siswa   = "detailssiswa";
+    private $table_pengguna   = "user";
     private $table_status_absen   = "status_absen";
     private $arr_result = array();
     private $field_list = array('history_qr_code_id', 'qr_code_absensi', 'day', 'date_created'

@@ -2,10 +2,10 @@
 
 class Msiswa extends CI_Model
 {
-    private $table = "detail_siswa";
-    private $field_list = array('id_detail_siswa', 'nisn', 'id_pengguna','id_kelas');
+    private $table = "siswadetails";
+    private $field_list = array('siswadetailid', 'userid');
     private $exception_field = array('');
-    private $key_user_id = "id_detail_siswa";
+    private $key_user_id = "siswadetailid";
 
     public function __construct()
     {
