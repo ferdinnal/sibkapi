@@ -3,7 +3,8 @@
 class Msiswa extends CI_Model
 {
     private $table = "siswadetails";
-    private $field_list = array('siswadetailid', 'userid');
+    private $table_kelas = "kelas";
+    private $field_list = array('siswadetailid','nisn');
     private $exception_field = array('');
     private $key_user_id = "siswadetailid";
 
@@ -37,7 +38,7 @@ class Msiswa extends CI_Model
             }
         }
 
-        $this->db->select($select);
+        $this->db->join($this->table_kelas, $this->table . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
         if ($option != null) {
             if (array_key_exists('limit', $option)) {
                 $this->db->limit($option['limit']);

@@ -161,6 +161,33 @@ class Absensi extends REST_Controller
         print json_encode($arr_result);
     }
 
+    public function findBySiswaNewJadwal_post()
+    {
+        $id_pengguna= $this->input->post('id_pengguna');
+
+        $arr_result = array();
+        $data_siswa=$this->Mabsensi->findJadwalAll($id_pengguna);
+
+        if (count($data_siswa)==0) {
+            $arr_result = array(
+             'prilude' => array(
+                 'status' => 'warning',
+                 'message' => 'Data Tidak Di Temukan.'
+             )
+         );
+        } else {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'success',
+                    'message' => 'Data Pengguna Ditemukan.',
+                   'data_siswa'     => $data_siswa,
+                )
+            );
+        }
+
+        print json_encode($arr_result);
+    }
+
     public function absensi_siswa_post()
     {
         $id_kelas= $this->input->post('id_kelas');

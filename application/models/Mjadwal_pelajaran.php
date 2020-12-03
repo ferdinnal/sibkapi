@@ -16,14 +16,14 @@ class Mjadwal_pelajaran extends CI_Model
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Mpengaturan');
+        // $this->load->model('Mpengaturan');
     }
 
     public function find_siswa_all($id_pengguna, $result_type, $option = null)
     {
         $select = "";
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table.".id_jadwal_pelajaran");
@@ -58,7 +58,7 @@ class Mjadwal_pelajaran extends CI_Model
     {
         $select = "";
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table.".id_jadwal_pelajaran");
@@ -93,7 +93,7 @@ class Mjadwal_pelajaran extends CI_Model
     {
         $select = "";
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table.".id_jadwal_pelajaran");
@@ -129,7 +129,7 @@ class Mjadwal_pelajaran extends CI_Model
     {
         $select = "";
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table.".id_jadwal_pelajaran");
@@ -168,7 +168,7 @@ class Mjadwal_pelajaran extends CI_Model
         $hari_ini=date('N');
         $date=date('Y-m-d');
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table_mata_pelajaran_guru.".id_mata_pelajaran_guru");
@@ -207,7 +207,7 @@ class Mjadwal_pelajaran extends CI_Model
         $hari_ini=date('N');
         $date=date('Y-m-d');
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table_mata_pelajaran_guru.".id_mata_pelajaran_guru");
@@ -258,7 +258,7 @@ class Mjadwal_pelajaran extends CI_Model
         $date_6=date('Y-m-d', strtotime(' +5 day'));
         $date_7=date('Y-m-d', strtotime(' +6 day'));
 
-        $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
+        // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
         $this->db->select($this->table_kelas.".id_kelas");
         $this->db->select($this->table_mata_pelajaran_guru.".id_mata_pelajaran_guru");

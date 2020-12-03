@@ -147,7 +147,7 @@ class user extends CI_Controller
 
     function update_email() {
 
-      $data = array('alamat_email' => $this->input->post('alamat_email'), );
+      $data = array('email' => $this->input->post('email'), );
       $where = array('userid' => $this->input->post('userid'), );
 
         $arr_result = array();
@@ -173,9 +173,36 @@ class user extends CI_Controller
         print json_encode($arr_result);
     }
 
-    function update_handphone_post() {
+    function update_handphone() {
 
-      $data = array('no_handphone' => $this->input->post('no_handphone'), );
+      $data = array('no_user' => $this->input->post('no_user'), );
+      $where = array('userid' => $this->input->post('userid'), );
+
+        $arr_result = array();
+
+          if ($this->Muser->update($data,$where))
+           {
+
+             $arr_result = array(
+                 'sibk' => array(
+                     'status' => 'success',
+                     'message' => 'Data diupdate.',
+                 )
+             );
+          }else {
+            $arr_result = array(
+                'sibk' => array(
+                    'status' => 'warning',
+                    'message' => 'Data Tidak diupdate.'
+                )
+            );
+          }
+
+        print json_encode($arr_result);
+    }
+    function update_handphone_ortu() {
+
+      $data = array('no_ortu' => $this->input->post('no_ortu'), );
       $where = array('userid' => $this->input->post('userid'), );
 
         $arr_result = array();

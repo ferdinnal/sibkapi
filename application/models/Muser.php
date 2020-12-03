@@ -4,7 +4,7 @@ class Muser extends CI_Model
 {
     private $table = "user";
     private $field_list = array('userid', 'username', 'email', 'password',
-     'fullname', 'usertypeid');
+     'fullname', 'usertypeid','no_user','no_ortu','gambar_profil');
     private $exception_field = array('password');
     private $key_user_id = "userid";
 
