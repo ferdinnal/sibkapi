@@ -60,12 +60,16 @@ class user extends CI_Controller
               'userid' =>$userid ,
              );
                 $data_siswa=$this->Msiswa->find($query_siswa, 'row');
+                $data_pp=$this->Msiswa->findPP($query_siswa, 'result');
+                $total=$this->Msiswa->findSUM($query_siswa, 'row');
                 $arr_result = array(
                 'sibk' => array(
                     'status' => 'success',
                     'message' => 'Data berhasil ditemukan.',
                     'data_user'    =>  $data_user,
                     'data_siswa'    =>  $data_siswa,
+                    'data_pp'    =>  $data_pp,
+                    'total_pp'    =>  $total,
                 )
             );
             } else {
