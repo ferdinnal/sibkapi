@@ -53,26 +53,21 @@ class Mjadwal_pelajaran extends CI_Model
 
         // $is_semester=$this->Mpengaturan->findByName('IS_SEMESTER')->nilai_pengaturan;
 
-        $this->db->select($this->table_kelas.".id_kelas");
-        $this->db->select($this->table.".id_jadwal_pelajaran");
-        $this->db->select($this->table_kelas.".nama_kelas");
-        $this->db->select($this->table_mata_pelajaran_guru.".id_mata_pelajaran_guru");
-        $this->db->select($this->table_mata_pelajaran.".id_mata_pelajaran");
-        $this->db->select($this->table_mata_pelajaran.".nama_mata_pelajaran");
-        $this->db->select($this->table_detail_guru.".nip");
-        $this->db->select($this->table_pengguna.".nama_pengguna as nama_guru");
-        $this->db->select($this->table.".jam_mulai as mulai");
-        $this->db->select($this->table.".jam_beres as beres");
+        $this->db->select($this->table.".jadid");
+        $this->db->select($this->table.".mulai as mulai");
+        $this->db->select($this->table.".selesai as beres");
         $this->db->select($this->table.".hari as hari");
-        $this->db->select($this->table.".id_semester");
+        $this->db->select($this->table.".semester");
+        $this->db->select($this->table_kelas.".id_kelas");
+        $this->db->select($this->table_kelas.".nama_kelas");
+        $this->db->select($this->table_mata_pelajaran.".idmat");
+        $this->db->select($this->table_mata_pelajaran.".matpel");
+        $this->db->select($this->table_pengguna.".fullname as nama_guru");
         $this->db->join($this->table_kelas, $this->table . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
-        $this->db->join($this->table_mata_pelajaran_guru, $this->table . '.id_mata_pelajaran_guru = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran_guru');
-        $this->db->join($this->table_mata_pelajaran, $this->table_mata_pelajaran . '.id_mata_pelajaran = ' . $this->table_mata_pelajaran_guru . '.id_mata_pelajaran');
+        $this->db->join($this->table_mata_pelajaran, $this->table . '.idmat = ' . $this->table_mata_pelajaran . '.idmat');
+        $this->db->join($this->table_pengguna, $this->table_mata_pelajaran . '.userid = ' . $this->table_pengguna . '.userid');
         $this->db->join($this->table_detail_siswa, $this->table_kelas . '.id_kelas = ' . $this->table_detail_siswa . '.id_kelas');
-        $this->db->join($this->table_detail_guru, $this->table_mata_pelajaran_guru . '.id_guru = ' . $this->table_detail_guru . '.id_pengguna');
-        $this->db->join($this->table_pengguna, $this->table_detail_guru . '.id_pengguna = ' . $this->table_pengguna . '.id_pengguna');
-        $this->db->where($this->table_detail_guru . '.id_pengguna', $id_pengguna);
-        $this->db->where($this->table . '.id_semester', $is_semester);
+        $this->db->where($this->table_mata_pelajaran . '.userid', $id_pengguna);
         $this->db->order_by($this->table.".hari",'asc');
         $this->db->group_by($this->table.".hari");
 
