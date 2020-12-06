@@ -40,12 +40,12 @@ class Absensi extends REST_Controller
                 $data = array(
                 'day' =>$hari_ini ,
                 'date_created' =>$nowTime ,
-                'id_jadwal_pelajaran' =>$id_jadwal_pelajaran ,
+                'jadid' =>$id_jadwal_pelajaran ,
                 'qr_code_absensi' =>md5($qrCodeAbsensi) ,
             );
                 if ($this->Mabsensi->create($data)) {
-                    $dataUpdate = array('qr_code_absensi' =>md5($qrCodeAbsensi)  , );
-                    $where = array('id_jadwal_pelajaran' =>$id_jadwal_pelajaran  , );
+                    $dataUpdate = array('qrcode' =>md5($qrCodeAbsensi)  , );
+                    $where = array('jadid' =>$id_jadwal_pelajaran  , );
                     if ($this->Mjadwal_pelajaran->update($dataUpdate, $where)) {
                         $data_siswaNa=$this->Mabsensi->find_jadwal_order($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran);
                         if ($this->Mabsensi->createAbsensiAll($id_kelas, $id_jadwal_pelajaran, $data_siswaNa->history_qr_code_id)) {
@@ -102,7 +102,7 @@ class Absensi extends REST_Controller
         print json_encode($arr_result);
     }
 
-    public function find_hari_post()
+    public function find_hariNEw_post()
     {
         $id_pengguna= $this->input->post('id_pengguna');
         $id_kelas= $this->input->post('id_kelas');
@@ -167,6 +167,32 @@ class Absensi extends REST_Controller
 
         $arr_result = array();
         $data_siswa=$this->Mabsensi->findJadwalAll($id_pengguna);
+
+        if (count($data_siswa)==0) {
+            $arr_result = array(
+             'prilude' => array(
+                 'status' => 'warning',
+                 'message' => 'Data Tidak Di Temukan.'
+             )
+         );
+        } else {
+            $arr_result = array(
+                'prilude' => array(
+                    'status' => 'success',
+                    'message' => 'Data Pengguna Ditemukan.',
+                   'data_siswa'     => $data_siswa,
+                )
+            );
+        }
+
+        print json_encode($arr_result);
+    }
+    public function findByGuruNewJadwal_post()
+    {
+        $id_pengguna= $this->input->post('id_pengguna');
+
+        $arr_result = array();
+        $data_siswa=$this->Mabsensi->findJadwalAllGuru($id_pengguna);
 
         if (count($data_siswa)==0) {
             $arr_result = array(
