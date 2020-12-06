@@ -1,28 +1,7 @@
 <?php
 
 
-
-defined('BASEPATH') or exit('No direct script access allowed');
-
-use Restserver\Libraries\REST_Controller;
-
-
-
-require APPPATH . 'libraries/REST_Controller.php';
-
-require APPPATH . 'libraries/Format.php';
-
-
-
-if (!defined('BASEPATH')) {
-
-    exit('No direct script access allowed');
-
-}
-
-
-
-class Konseling extends REST_Controller
+class Konseling extends CI_Controller
 
 {
 
@@ -42,7 +21,7 @@ class Konseling extends REST_Controller
 
     }
 
-    public function finds_post()
+    public function finds()
 
   {
       $status= $this->input->post('status');
@@ -86,7 +65,7 @@ class Konseling extends REST_Controller
       print json_encode($arr_result);
 
   }
-  public function finds2_post()
+  public function finds2()
 
 {
     $status= $this->input->post('status');
@@ -130,7 +109,7 @@ class Konseling extends REST_Controller
     print json_encode($arr_result);
 
 }
-public function tambah_post()
+public function tambah()
 
 {
   $subject= $this->input->post('subject');

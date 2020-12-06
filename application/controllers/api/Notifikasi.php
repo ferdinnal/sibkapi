@@ -1,16 +1,6 @@
 <?php
 
-defined('BASEPATH') or exit('No direct script access allowed');
-use Restserver\Libraries\REST_Controller;
-
-require APPPATH . 'libraries/REST_Controller.php';
-require APPPATH . 'libraries/Format.php';
-
-if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
-
-class Notifikasi extends REST_Controller
+class Notifikasi extends CI_Controller
 {
     private $arr_result = array();
 
@@ -26,7 +16,7 @@ class Notifikasi extends REST_Controller
         $this->load->model('Mnotifikasi');
     }
 
-    public function finds_interval_post()
+    public function finds_interval()
     {
         $query  = array();
         $option = array();
@@ -86,7 +76,7 @@ class Notifikasi extends REST_Controller
         $this->response($this->arr_result);
     }
 
-    public function update_post()
+    public function update()
       {
           $data  = array();
           $where = array();

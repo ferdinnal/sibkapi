@@ -1,28 +1,7 @@
 <?php
 
 
-
-defined('BASEPATH') or exit('No direct script access allowed');
-
-use Restserver\Libraries\REST_Controller;
-
-
-
-require APPPATH . 'libraries/REST_Controller.php';
-
-require APPPATH . 'libraries/Format.php';
-
-
-
-if (!defined('BASEPATH')) {
-
-    exit('No direct script access allowed');
-
-}
-
-
-
-class Jadwal_pelajaran extends REST_Controller
+class Jadwal_pelajaran extends CI_Controller
 
 {
 
@@ -42,7 +21,7 @@ class Jadwal_pelajaran extends REST_Controller
 
     }
 
-    public function jadwal_pelajaran_all_siswa_post()
+    public function jadwal_pelajaran_all_siswa()
 
   {
 
@@ -92,7 +71,7 @@ class Jadwal_pelajaran extends REST_Controller
 
   }
 
-  public function jadwal_pelajaran_all_guru_post()
+  public function jadwal_pelajaran_all_guru()
 
 {
 
@@ -141,7 +120,7 @@ class Jadwal_pelajaran extends REST_Controller
     print json_encode($arr_result);
 
 }
-  function jadwal_pelajaran_detail_list_get($hari) {
+  function jadwal_pelajaran_detail_list($hari) {
 
       $data = $this->Mjadwal_pelajaran->find_siswa_detail_2($hari,'result');
 

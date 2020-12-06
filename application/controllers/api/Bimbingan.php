@@ -2,27 +2,7 @@
 
 
 
-defined('BASEPATH') or exit('No direct script access allowed');
-
-use Restserver\Libraries\REST_Controller;
-
-
-
-require APPPATH . 'libraries/REST_Controller.php';
-
-require APPPATH . 'libraries/Format.php';
-
-
-
-if (!defined('BASEPATH')) {
-
-    exit('No direct script access allowed');
-
-}
-
-
-
-class Bimbingan extends REST_Controller
+class Bimbingan extends CI_Controller
 
 {
 
@@ -42,7 +22,7 @@ class Bimbingan extends REST_Controller
 
     }
 
-    public function finds_post()
+    public function finds()
 
   {
 

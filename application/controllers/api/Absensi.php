@@ -1,15 +1,5 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-use Restserver\Libraries\REST_Controller;
-
-require APPPATH . 'libraries/REST_Controller.php';
-require APPPATH . 'libraries/Format.php';
-
-if (!defined('BASEPATH')) {
-    exit('No direct script access allowed');
-}
-
-class Absensi extends REST_Controller
+class Absensi extends CI_Controller
 {
     private $field_list = array('history_qr_code_id', 'qr_code_absensi', 'day', 'date_created'
             , 'id_jadwal_pelajaran');
@@ -21,7 +11,7 @@ class Absensi extends REST_Controller
         date_default_timezone_set("Asia/Bangkok");
     }
 
-    public function generate_qr_post()
+    public function generate_qr()
     {
         $id_pengguna= $this->input->post('id_pengguna');
         $id_kelas= $this->input->post('id_kelas');
@@ -102,7 +92,7 @@ class Absensi extends REST_Controller
         print json_encode($arr_result);
     }
 
-    public function find_hariNEw_post()
+    public function find_hariNEw()
     {
         $id_pengguna= $this->input->post('id_pengguna');
         $id_kelas= $this->input->post('id_kelas');
@@ -131,7 +121,7 @@ class Absensi extends REST_Controller
 
         print json_encode($arr_result);
     }
-    public function find_hari_siswa_post()
+    public function find_hari_siswa()
     {
         $id_pengguna= $this->input->post('id_pengguna');
         $id_kelas= $this->input->post('id_kelas');
@@ -161,7 +151,7 @@ class Absensi extends REST_Controller
         print json_encode($arr_result);
     }
 
-    public function findBySiswaNewJadwal_post()
+    public function findBySiswaNewJadwal()
     {
         $id_pengguna= $this->input->post('id_pengguna');
 
@@ -187,7 +177,7 @@ class Absensi extends REST_Controller
 
         print json_encode($arr_result);
     }
-    public function findByGuruNewJadwal_post()
+    public function findByGuruNewJadwal()
     {
         $id_pengguna= $this->input->post('id_pengguna');
 
@@ -214,7 +204,7 @@ class Absensi extends REST_Controller
         print json_encode($arr_result);
     }
 
-    public function absensi_siswa_post()
+    public function absensi_siswa()
     {
         $id_kelas= $this->input->post('id_kelas');
         $history_qr_code_id= $this->input->post('history_qr_code_id');
@@ -265,7 +255,7 @@ class Absensi extends REST_Controller
 
         print json_encode($arr_result);
     }
-    public function find_absensi_siswa_post()
+    public function find_absensi_siswa()
     {
         $history_qr_code_id= $this->input->post('history_qr_code_id');
         $id_kelas= $this->input->post('id_kelas');
@@ -305,7 +295,7 @@ class Absensi extends REST_Controller
         print json_encode($arr_result);
     }
 
-    public function update_by_guru_post()
+    public function update_by_guru()
     {
         $absensi_id= $this->input->post('absensi_id');
         $status_absen_id= $this->input->post('status_absen_id');
