@@ -47,6 +47,35 @@ class Mjadwal_pelajaran extends CI_Model
             return $this->db->get($this->table)->result();
         }
     }
+    public function find_siswa_all_byjadid($id_jadwal_pelajaran, $result_type, $option = null)
+    {
+        $select = "";
+
+        $this->db->select($this->table.".jadid");
+        $this->db->select($this->table.".mulai as mulai");
+        $this->db->select($this->table.".selesai as beres");
+        $this->db->select($this->table.".hari as hari");
+        $this->db->select($this->table.".semester");
+        $this->db->select($this->table_kelas.".id_kelas");
+        $this->db->select($this->table_kelas.".nama_kelas");
+        $this->db->select($this->table_mata_pelajaran.".idmat");
+        $this->db->select($this->table_mata_pelajaran.".matpel");
+        $this->db->select($this->table_pengguna.".fullname as nama_guru");
+        $this->db->join($this->table_kelas, $this->table . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
+        $this->db->join($this->table_mata_pelajaran, $this->table . '.idmat = ' . $this->table_mata_pelajaran . '.idmat');
+        $this->db->join($this->table_pengguna, $this->table_mata_pelajaran . '.userid = ' . $this->table_pengguna . '.userid');
+        $this->db->join($this->table_detail_siswa, $this->table_kelas . '.id_kelas = ' . $this->table_detail_siswa . '.id_kelas');
+        $this->db->where($this->table . '.jadid', $id_jadwal_pelajaran);
+        $this->db->order_by($this->table.".hari",'asc');
+        $this->db->group_by($this->table.".hari");
+
+
+        if ($result_type == "row") {
+            return $this->db->get($this->table)->row();
+        } else {
+            return $this->db->get($this->table)->result();
+        }
+    }
     public function find_guru_all($id_pengguna, $result_type, $option = null)
     {
         $select = "";

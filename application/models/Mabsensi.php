@@ -171,6 +171,38 @@ class Mabsensi extends CI_Model
         //return $data_image;
         return $data_product;
     }
+
+    public function find_hari_siswaNew($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran)
+    {
+        $this->db->select($this->table_jadwal_pelajaran.".mulai");
+        $this->db->select($this->table_jadwal_pelajaran.".selesai");
+        $this->db->select($this->table_jadwal_pelajaran.".id_kelas");
+        $this->db->select($this->table_jadwal_pelajaran.".hari");
+        $this->db->select($this->table_jadwal_pelajaran.".qrcode");
+        $this->db->select($this->table_jadwal_pelajaran.".jadid");
+        $this->db->select($this->table.".qr_code_absensi");
+        $this->db->select($this->table.".history_qr_code_id");
+        $this->db->select($this->table.".date_created");
+        $this->db->select($this->table_kelas.".nama_kelas");
+        $this->db->select($this->table_mata_pelajaran.".kodemat");
+        $this->db->select($this->table_mata_pelajaran.".matpel");
+        $this->db->select($this->table_mata_pelajaran.".idmat");
+        $this->db->join($this->table_mata_pelajaran, $this->table_jadwal_pelajaran . '.idmat = ' . $this->table_mata_pelajaran . '.idmat');
+        $this->db->join($this->table_kelas, $this->table_jadwal_pelajaran . '.id_kelas = ' . $this->table_kelas . '.id_kelas');
+        $this->db->join($this->table_ruangan, $this->table_jadwal_pelajaran . '.ruangid = ' . $this->table_ruangan . '.ruangid');
+        $this->db->join($this->table_pengguna, $this->table_mata_pelajaran . '.userid = ' . $this->table_pengguna . '.userid');
+        $this->db->join($this->table, $this->table_jadwal_pelajaran . '.jadid = ' . $this->table . '.jadid');
+        $this->db->where($this->table_jadwal_pelajaran . '.jadid', $id_jadwal_pelajaran);
+        $this->db->where($this->table_kelas . '.id_kelas', $id_kelas);
+        $this->db->order_by($this->table.".date_created", 'desc');
+        $this->db->group_by($this->table.".history_qr_code_id");
+
+        $data_product = $this->db->get($this->table_jadwal_pelajaran)->result();
+
+        //array_push($data_product,$data_image);
+        //return $data_image;
+        return $data_product;
+    }
     public function find_jadwal_now($id_pengguna, $id_kelas, $hari_ini, $nowTime, $id_jadwal_pelajaran)
     {
         $query = "SELECT tj.id_kelas,tj.mulai,tj.selesai,tj.hari,tj.qrcode,hq.qr_code_absensi,hq.history_qr_code_id,$hari_ini as hari_now

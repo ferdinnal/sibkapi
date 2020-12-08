@@ -26,50 +26,62 @@ class Absensi extends CI_Controller
             $data_siswa2=$this->Mabsensi->find_jadwal_now($id_pengguna, $id_kelas, $hari_ini, $nowTimeNa, $id_jadwal_pelajaran);
             if (count($data_siswa2)==0) {
                 // $data_jadwal=$this->Mabsensi->find_jadwal2($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran);
-                $qrCodeAbsensi=$id_kelas.$id_jadwal_pelajaran.$id_pengguna.$hari_ini;
-                $data = array(
-                'day' =>$hari_ini ,
-                'date_created' =>$nowTime ,
-                'jadid' =>$id_jadwal_pelajaran ,
-                'qr_code_absensi' =>md5($qrCodeAbsensi) ,
-            );
-                if ($this->Mabsensi->create($data)) {
-                    $dataUpdate = array('qrcode' =>md5($qrCodeAbsensi)  , );
-                    $where = array('jadid' =>$id_jadwal_pelajaran  , );
-                    if ($this->Mjadwal_pelajaran->update($dataUpdate, $where)) {
-                        $data_siswaNa=$this->Mabsensi->find_jadwal_order($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran);
-                        if ($this->Mabsensi->createAbsensiAll($id_kelas, $id_jadwal_pelajaran, $data_siswaNa->history_qr_code_id)) {
-                            $arr_result = array(
-                    'prilude' => array(
-                        'status' => 'success',
-                        'message' => 'Data Pengguna Ditemukan.',
-                       'data_siswa'     => $data_siswaNa,
-                    )
-                );
-                        } else {
-                            $arr_result = array(
+                $data_jad=$this->Mjadwal_pelajaran->find_siswa_all_byjadid($id_jadwal_pelajaran, 'row');
+                if ($data_jad->hari == $hari_ini) {
+                  $qrCodeAbsensi=$id_kelas.$id_jadwal_pelajaran.$id_pengguna.$hari_ini;
+                  $data = array(
+                  'day' =>$hari_ini ,
+                  'date_created' =>$nowTime ,
+                  'jadid' =>$id_jadwal_pelajaran ,
+                  'qr_code_absensi' =>md5($qrCodeAbsensi) ,
+              );
+                  if ($this->Mabsensi->create($data)) {
+                      $dataUpdate = array('qrcode' =>md5($qrCodeAbsensi)  , );
+                      $where = array('jadid' =>$id_jadwal_pelajaran  , );
+                      if ($this->Mjadwal_pelajaran->update($dataUpdate, $where)) {
+                          $data_siswaNa=$this->Mabsensi->find_jadwal_order($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran);
+                          if ($this->Mabsensi->createAbsensiAll($id_kelas, $id_jadwal_pelajaran, $data_siswaNa->history_qr_code_id)) {
+                              $arr_result = array(
+                      'prilude' => array(
+                          'status' => 'success',
+                          'message' => 'Data Pengguna Ditemukan.',
+                         'data_siswa'     => $data_siswaNa,
+                      )
+                  );
+                          } else {
+                              $arr_result = array(
+                       'prilude' => array(
+                           'status' => 'warning',
+                           'message' => 'QrCode Tidak Di Temukan.'
+                       )
+                   );
+                          }
+                      } else {
+                          $arr_result = array(
+                       'prilude' => array(
+                           'status' => 'warning',
+                           'message' => 'QrCode Tidak Di Temukan.'
+                       )
+                   );
+                      }
+                  } else {
+                      $arr_result = array(
                      'prilude' => array(
                          'status' => 'warning',
                          'message' => 'QrCode Tidak Di Temukan.'
                      )
                  );
-                        }
-                    } else {
-                        $arr_result = array(
-                     'prilude' => array(
-                         'status' => 'warning',
-                         'message' => 'QrCode Tidak Di Temukan.'
-                     )
-                 );
-                    }
-                } else {
-                    $arr_result = array(
-                   'prilude' => array(
-                       'status' => 'warning',
-                       'message' => 'QrCode Tidak Di Temukan.'
-                   )
-               );
+                  }
+                }else {
+                  $arr_result = array(
+          'prilude' => array(
+              'status' => 'successNya',
+              'message' => 'Data Pengguna Ditemukan.',
+          )
+      );
                 }
+
+
             } else {
                 $arr_result = array(
                 'prilude' => array(
@@ -129,7 +141,7 @@ class Absensi extends CI_Controller
         $hari_ini=date('N');
 
         $arr_result = array();
-        $data_siswa=$this->Mabsensi->find_hari_siswa($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran);
+        $data_siswa=$this->Mabsensi->find_hari_siswaNew($id_pengguna, $id_kelas, $hari_ini, $id_jadwal_pelajaran);
 
         if (count($data_siswa)==0) {
             $arr_result = array(
